@@ -43,3 +43,23 @@ raw_data = pd.DataFrame(
 raw_data.loc[50:55, 'temperature_c'] = np.nan
 raw_data.loc[200:205, 'wind_speed_ms'] = np.nan
 
+# =========================================================
+# Time-Series Preparation
+#
+# Convert timestamp values into Pandas datetime objects,
+# then use the timestamp column as the DataFrame index.
+#
+# A datetime index enables time-based operations such as:
+# - interpolation
+# - rolling windows
+# - resampling
+# - forecasting workflows
+# =========================================================
+# 2. Pandas cleaning & Feature engineering
+# Convert timestamps to datetime objects.
+raw_data["timestamp"] = pd.to_datetime(raw_data["timestamp"])
+
+# Use timestamps as the DataFrame index and ensure
+# observations are ordered chronologically.
+raw_data = raw_data.set_index('timestamp').sort_index()
+
