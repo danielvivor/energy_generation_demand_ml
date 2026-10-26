@@ -20,6 +20,7 @@ CREATE TABLE stations (
     capacity_mw DECIMAL(8, 2) NOT NULL
 );
 
+-- Time-series telemetry and weather data table
 CREATE TABLE grid_telemetry (
     record_id SERIAL PRIMARY KEY,
     station_id INT REFERENCES stations (station_id),
@@ -29,3 +30,7 @@ CREATE TABLE grid_telemetry (
     wind_speed_ms DECIMAL(5, 2), -- Wind speed in m/s
     actual_generation_mw DECIMAL(8, 2) -- Target variable
 );
+
+-- Index for fast time-series slicing
+CREATE INDEX idx_telemetry_timestamp ON grid_telemetry (timestamp);
+CREATE INDEX idx_telemetry_station ON grid_telemetry (station_id);
