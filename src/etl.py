@@ -69,3 +69,16 @@ raw_data['temperature_c'] = raw_data['temperature_c'].interpolate(method='time')
 # Estimate missing wind-speed observations.
 raw_data['wind_speed_ms'] = raw_data['wind_speed_ms'].interpolate(method='time')
 
+# =========================================================
+# Feature Engineering
+
+# Rolling features capture recent trends while lag features
+# provide historical context for the machine-learning model.
+# =========================================================
+
+# Average temperature over the previous 3-hour period.
+raw_data['temp_rolling_3h'] = (raw_data['temperature_c'].rolling(window='3h').mean())
+
+# Wind speed observed one hour earlier.
+raw_data['wind_lag_1h'] = raw_data['wind_speed_ms'].shift(1)
+
