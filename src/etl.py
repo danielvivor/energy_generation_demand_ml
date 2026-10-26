@@ -82,3 +82,6 @@ raw_data['temp_rolling_3h'] = (raw_data['temperature_c'].rolling(window='3h').me
 # Wind speed observed one hour earlier.
 raw_data['wind_lag_1h'] = raw_data['wind_speed_ms'].shift(1)
 
+# Drop any remaining initialization NaNs from lagging/rolling
+cleaned_data = raw_data.dropna().reset_index()
+
