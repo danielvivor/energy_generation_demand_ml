@@ -1,0 +1,19 @@
+
+# virtual environment
+.venv/
+
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+
+# vscode
+.vscode/
+
+# notebooks
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
