@@ -63,3 +63,9 @@ raw_data["timestamp"] = pd.to_datetime(raw_data["timestamp"])
 # observations are ordered chronologically.
 raw_data = raw_data.set_index('timestamp').sort_index()
 
+# Estimate missing temperature observations.
+raw_data['temperature_c'] = raw_data['temperature_c'].interpolate(method='time')
+
+# Estimate missing wind-speed observations.
+raw_data['wind_speed_ms'] = raw_data['wind_speed_ms'].interpolate(method='time')
+
