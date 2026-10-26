@@ -94,12 +94,15 @@ cleaned_data = raw_data.dropna().reset_index()
 # - Verify that no missing values remain
 # =========================================================
 
-print("\nDataset Preview:")
+print('\nDataset Preview:')
 print(cleaned_data.head())
 
-print("\nShape:")
+print('\nShape:')
 print(cleaned_data.shape)
 
-print("\nMissing Values:")
+print('\nMissing Values:')
 print(cleaned_data.isna().sum())
 
+# 3. Load into PostgreSQL (using SQLAlchemy and psycopg backend)
+engine = create_engine(f'postgresql+psycopg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
+cleaned_data.to_sql('grid_telemetry_clean', engine, if_exists='append', index=False)
