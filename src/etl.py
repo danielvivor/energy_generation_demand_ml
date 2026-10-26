@@ -38,3 +38,8 @@ raw_data = pd.DataFrame(
         "actual_generation_mw": np.random.uniform(0, 50, size=720),
     }
 )
+
+# Introduce artificial missing values (sensor dropouts) to simulate data cleaning
+raw_data.loc[50:55, 'temperature_c'] = np.nan
+raw_data.loc[200:205, 'wind_speed_ms'] = np.nan
+
