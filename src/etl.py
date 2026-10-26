@@ -85,3 +85,21 @@ raw_data['wind_lag_1h'] = raw_data['wind_speed_ms'].shift(1)
 # Drop any remaining initialization NaNs from lagging/rolling
 cleaned_data = raw_data.dropna().reset_index()
 
+# =========================================================
+# Inspect the final dataset before loading it into PostgreSQL.
+#
+# Validation checks:
+# - Preview transformed records
+# - Confirm expected dataset dimensions
+# - Verify that no missing values remain
+# =========================================================
+
+print("\nDataset Preview:")
+print(cleaned_data.head())
+
+print("\nShape:")
+print(cleaned_data.shape)
+
+print("\nMissing Values:")
+print(cleaned_data.isna().sum())
+
