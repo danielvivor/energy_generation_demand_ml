@@ -6,6 +6,7 @@
 # =========================================================
 
 import os
+
 from dotenv import load_dotenv
 
 # Load environmental variables from the .env file.
@@ -40,8 +41,8 @@ raw_data = pd.DataFrame(
 )
 
 # Introduce artificial missing values (sensor dropouts) to simulate data cleaning
-raw_data.loc[50:55, 'temperature_c'] = np.nan
-raw_data.loc[200:205, 'wind_speed_ms'] = np.nan
+raw_data.loc[50:55, "temperature_c"] = np.nan
+raw_data.loc[200:205, "wind_speed_ms"] = np.nan
 
 # =========================================================
 # Time-Series Preparation
@@ -61,13 +62,13 @@ raw_data["timestamp"] = pd.to_datetime(raw_data["timestamp"])
 
 # Use timestamps as the DataFrame index and ensure
 # observations are ordered chronologically.
-raw_data = raw_data.set_index('timestamp').sort_index()
+raw_data = raw_data.set_index("timestamp").sort_index()
 
 # Estimate missing temperature observations.
-raw_data['temperature_c'] = raw_data['temperature_c'].interpolate(method='time')
+raw_data["temperature_c"] = raw_data["temperature_c"].interpolate(method="time")
 
 # Estimate missing wind-speed observations.
-raw_data['wind_speed_ms'] = raw_data['wind_speed_ms'].interpolate(method='time')
+raw_data["wind_speed_ms"] = raw_data["wind_speed_ms"].interpolate(method="time")
 
 # =========================================================
 # Feature Engineering
@@ -77,10 +78,10 @@ raw_data['wind_speed_ms'] = raw_data['wind_speed_ms'].interpolate(method='time')
 # =========================================================
 
 # Average temperature over the previous 3-hour period.
-raw_data['temp_rolling_3h'] = (raw_data['temperature_c'].rolling(window='3h').mean())
+raw_data["temp_rolling_3h"] = raw_data["temperature_c"].rolling(window="3h").mean()
 
 # Wind speed observed one hour earlier.
-raw_data['wind_lag_1h'] = raw_data['wind_speed_ms'].shift(1)
+raw_data["wind_lag_1h"] = raw_data["wind_speed_ms"].shift(1)
 
 # Drop any remaining initialization NaNs from lagging/rolling
 cleaned_data = raw_data.dropna().reset_index()
@@ -94,15 +95,17 @@ cleaned_data = raw_data.dropna().reset_index()
 # - Verify that no missing values remain
 # =========================================================
 
-print('\nDataset Preview:')
+print("\nDataset Preview:")
 print(cleaned_data.head())
 
-print('\nShape:')
+print("\nShape:")
 print(cleaned_data.shape)
 
-print('\nMissing Values:')
+print("\nMissing Values:")
 print(cleaned_data.isna().sum())
 
 # 3. Load into PostgreSQL (using SQLAlchemy and psycopg backend)
-engine = create_engine(f'postgresql+psycopg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
-cleaned_data.to_sql('grid_telemetry_clean', engine, if_exists='append', index=False)
+engine = create_engine(
+    f"postgresql+psycopg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+)
+cleaned_data.to_sql("grid_telemetry_clean", engine, if_exists="append", index=False)
