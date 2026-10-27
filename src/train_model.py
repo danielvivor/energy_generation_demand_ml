@@ -66,3 +66,8 @@ Y_test = Y.iloc[train_size:]
 # Fit model 
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, Y_train)
+
+# Evaluate
+predictions = model.predict(X_test)
+rmse = mean_squared_error(Y_test, predictions, squared=False)
+print(f'Model Evaluation - RMSE: {rmse:.2f} MW')
