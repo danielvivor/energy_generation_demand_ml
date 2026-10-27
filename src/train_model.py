@@ -21,7 +21,7 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import root_mean_squared_error
 
 # =========================================================
 # Database Connection
@@ -46,10 +46,10 @@ df = pd.read_sql(query, engine)
 #
 # y:
 #     Actual power generation output to be predicted.
-# ========================================================= 
+# =========================================================
 
-X = df[['temperature_c', 'ghi_w_m2', 'wind_speed_ms', 'temp_rolling_3h', 'wind_lag_1h']]
-Y = df['actual_generation_mw']
+X = df[["temperature_c", "ghi_w_m2", "wind_speed_ms", "temp_rolling_3h", "wind_lag_1h"]]
+Y = df["actual_generation_mw"]
 
 # Train/ Test Split (respecting chronological order is best practice for time-series)
 # Determine the training dataset size.
@@ -63,11 +63,14 @@ Y_train = Y.iloc[:train_size]
 X_test = X.iloc[train_size:]
 Y_test = Y.iloc[train_size:]
 
-# Fit model 
+# Fit model
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, Y_train)
 
-# Evaluate
+# Generate predictions from the testing dataset.
 predictions = model.predict(X_test)
-rmse = mean_squared_error(Y_test, predictions, squared=False)
-print(f'Model Evaluation - RMSE: {rmse:.2f} MW')
+
+# Calculate Root Mean Squared Error (RMSE).
+rmse = root_mean_squared_error(Y_test, predictions)
+
+print(f"Model Evaluation - RMSE: {rmse:.2f} MW")
