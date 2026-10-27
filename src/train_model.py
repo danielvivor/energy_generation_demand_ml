@@ -34,3 +34,19 @@ engine = create_engine(
 # Pull clean data from database
 query = "SELECT temperature_c, ghi_w_m2, wind_speed_ms, temp_rolling_3h, wind_lag_1h, actual_generation_mw FROM grid_telemetry_clean"
 df = pd.read_sql(query, engine)
+
+# =========================================================
+# Feature Selection
+#
+# Define the predictor variables (X) and the target
+# variable (y) for machine-learning training.
+#
+# X:
+#     Weather and engineered telemetry features.
+#
+# y:
+#     Actual power generation output to be predicted.
+# ========================================================= 
+
+X = df[['temperature_c', 'ghi_w_m2', 'wind_speed_ms', 'temp_rolling_3h', 'wind_lag_1h']]
+Y = df['actual_generation_mw']
