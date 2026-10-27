@@ -62,3 +62,7 @@ Y_train = Y.iloc[:train_size]
 # Future data used for model evaluation.
 X_test = X.iloc[train_size:]
 Y_test = Y.iloc[train_size:]
+
+# Fit model 
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, Y_train)
