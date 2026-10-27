@@ -50,3 +50,15 @@ df = pd.read_sql(query, engine)
 
 X = df[['temperature_c', 'ghi_w_m2', 'wind_speed_ms', 'temp_rolling_3h', 'wind_lag_1h']]
 Y = df['actual_generation_mw']
+
+# Train/ Test Split (respecting chronological order is best practice for time-series)
+# Determine the training dataset size.
+train_size = int(len(df) * 0.8)
+
+# Historical data used for model training.
+X_train = X.iloc[:train_size]
+Y_train = Y.iloc[:train_size]
+
+# Future data used for model evaluation.
+X_test = X.iloc[train_size:]
+Y_test = Y.iloc[train_size:]
